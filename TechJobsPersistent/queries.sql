@@ -4,6 +4,9 @@ FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_NAME = 'jobs'; 
 
 --Part 2
+SELECT Name 
+FROM employers 
+WHERE Location = 'Saint Louis';
 
 --Part 3
 
