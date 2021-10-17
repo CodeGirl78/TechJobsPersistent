@@ -32,27 +32,43 @@ namespace TechJobsPersistent.Controllers
         [HttpGet("/Add")]
         public IActionResult AddJob()
         {
-            return View();
+            AddJobViewModel addJobViewModel = new AddJobViewModel(context.Employers.ToList(), context.Skills.ToList());
+            return View(addJobViewModel);
         }
 
-        public IActionResult ProcessAddJobForm()
+        [HttpPost("/Add")]
+        public IActionResult ProcessAddJobForm(AddJobViewModel addJobViewModel)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                Employer employer = context.Employers.Find(addJobViewModel.EmployerId);
+                Job newJob = new Job
+                {
+                    Name = addJobViewModel.Name,
+                    Employer = employer
+                };
+
+                context.Jobs.Add(newJob);
+                context.SaveChanges();
+                return Redirect("/Home");
+            }
+
+            return View("AddJob", addJobViewModel);
         }
 
-        public IActionResult Detail(int id)
-        {
-            Job theJob = context.Jobs
-                .Include(j => j.Employer)
-                .Single(j => j.Id == id);
+            public IActionResult Detail(int id)
+            {
+                Job theJob = context.Jobs
+                    .Include(j => j.Employer)
+                    .Single(j => j.Id == id);
 
-            List<JobSkill> jobSkills = context.JobSkills
-                .Where(js => js.JobId == id)
-                .Include(js => js.Skill)
-                .ToList();
+                List<JobSkill> jobSkills = context.JobSkills
+                    .Where(js => js.JobId == id)
+                    .Include(js => js.Skill)
+                    .ToList();
 
-            JobDetailViewModel viewModel = new JobDetailViewModel(theJob, jobSkills);
-            return View(viewModel);
+                JobDetailViewModel viewModel = new JobDetailViewModel(theJob, jobSkills);
+                return View(viewModel);
+            }
         }
     }
-}
