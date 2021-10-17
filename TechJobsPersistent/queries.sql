@@ -9,4 +9,7 @@ FROM employers
 WHERE Location = 'Saint Louis';
 
 --Part 3
-
+SELECT skills.Name,skills.Description 
+FROM jobskills 
+INNER JOIN skills ON skills.id = jobskills.skillid 
+ORDER BY skills.Name ASC;
