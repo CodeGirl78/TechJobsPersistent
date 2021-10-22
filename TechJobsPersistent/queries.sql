@@ -11,5 +11,6 @@ WHERE Location = 'Saint Louis';
 --Part 3
 SELECT skills.Name,skills.Description 
 FROM jobskills 
-INNER JOIN skills ON skills.id = jobskills.skillid 
+LEFT JOIN skills ON skills.id = jobskills.skillid 
+WHERE techjobs.jobSkills.jobId IS NOT NULL
 ORDER BY skills.Name ASC;
